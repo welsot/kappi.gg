@@ -498,12 +498,12 @@ public class GalleryController(
     private static GalleryDto ToGalleryDto(Gallery gallery, List<MediaDto> mediaDtos)
     {
         return new GalleryDto(
-            gallery.Id,
-            gallery.ShortCode,
-            gallery.IsPublic,
-            !string.IsNullOrEmpty(gallery.PasswordHash),
-            gallery.CreatedAt,
-            new MediaListResponse(mediaDtos, mediaDtos.Count)
+            Id: gallery.Id,
+            ShortCode: gallery.ShortCode,
+            IsPublic: gallery.IsPublic,
+            HasPassword: !string.IsNullOrEmpty(gallery.PasswordHash),
+            CreatedAt: gallery.CreatedAt,
+            Media: new MediaListResponse(mediaDtos, mediaDtos.Count)
         );
     }
 }
