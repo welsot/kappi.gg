@@ -24,6 +24,7 @@ public class AnonymousGalleryController(
 ) : ApiController
 {
     [HttpPost("api/galleries/anonymous")]
+    [EndpointName("createAnonymousGallery")]
     [ProducesResponseType(typeof(CreateAnonymousGalleryResponse), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> CreateAnonymousGallery()
@@ -54,6 +55,7 @@ public class AnonymousGalleryController(
     }
 
     [HttpPost("api/galleries/anonymous/{accessKey}/media/request-upload")]
+    [EndpointName("anonymousGalleryRequestUploadUrl")]
     [ProducesResponseType(typeof(UploadUrlResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
@@ -101,6 +103,7 @@ public class AnonymousGalleryController(
     }
 
     [HttpPost("api/galleries/anonymous/{accessKey}/media/confirm-upload")]
+    [EndpointName("anonymousGalleryConfirmUpload")]
     [ProducesResponseType(typeof(SuccessResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
@@ -149,6 +152,7 @@ public class AnonymousGalleryController(
     }
 
     [HttpGet("api/galleries/anonymous/by-short-code/{shortCode}")]
+    [EndpointName("getAnonymousGalleryByShortCode")]
     [ProducesResponseType(typeof(AnonymousGalleryDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
@@ -211,6 +215,7 @@ public class AnonymousGalleryController(
     }
 
     [HttpDelete("api/galleries/anonymous/{accessKey}/media/{mediaId}")]
+    [EndpointName("deleteAnonymousGalleryMedia")]
     [ProducesResponseType(typeof(SuccessResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]

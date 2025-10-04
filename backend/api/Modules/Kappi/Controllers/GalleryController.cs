@@ -28,6 +28,7 @@ public class GalleryController(
 ) : ApiController
 {
     [HttpPost("api/galleries")]
+    [EndpointName("createGallery")]
     [ProducesResponseType(typeof(GalleryDto), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
@@ -69,6 +70,7 @@ public class GalleryController(
     }
 
     [HttpGet("api/galleries")]
+    [EndpointName("getMyGalleries")]
     [ProducesResponseType(typeof(GalleryListResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
@@ -103,6 +105,7 @@ public class GalleryController(
     }
 
     [HttpGet("api/galleries/{id}")]
+    [EndpointName("getGallery")]
     [ProducesResponseType(typeof(GalleryDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status401Unauthorized)]
@@ -138,6 +141,7 @@ public class GalleryController(
     }
 
     [HttpPut("api/galleries/{id}")]
+    [EndpointName("updateGallery")]
     [ProducesResponseType(typeof(GalleryDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status401Unauthorized)]
@@ -188,6 +192,7 @@ public class GalleryController(
     }
 
     [HttpDelete("api/galleries/{id}")]
+    [EndpointName("deleteGallery")]
     [ProducesResponseType(typeof(SuccessResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status401Unauthorized)]
@@ -232,6 +237,7 @@ public class GalleryController(
     }
 
     [HttpPost("api/galleries/{id}/media/request-upload")]
+    [EndpointName("galleryRequestUploadUrl")]
     [ProducesResponseType(typeof(UploadUrlResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status401Unauthorized)]
@@ -276,6 +282,7 @@ public class GalleryController(
     }
 
     [HttpPost("api/galleries/{id}/media/confirm-upload")]
+    [EndpointName("galleryConfirmUpload")]
     [ProducesResponseType(typeof(SuccessResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status401Unauthorized)]
@@ -328,6 +335,7 @@ public class GalleryController(
     }
 
     [HttpDelete("api/galleries/{id}/media/{mediaId}")]
+    [EndpointName("deleteGalleryMedia")]
     [ProducesResponseType(typeof(SuccessResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status401Unauthorized)]
@@ -375,6 +383,7 @@ public class GalleryController(
     }
 
     [HttpGet("api/galleries/by-short-code/{shortCode}")]
+    [EndpointName("getGalleryByShortCode")]
     [AllowAnonymous]
     [ProducesResponseType(typeof(GalleryDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
@@ -419,6 +428,7 @@ public class GalleryController(
     }
 
     [HttpPost("api/galleries/by-short-code/{shortCode}/verify-password")]
+    [EndpointName("verifyGalleryPassword")]
     [AllowAnonymous]
     [ProducesResponseType(typeof(GalleryDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
