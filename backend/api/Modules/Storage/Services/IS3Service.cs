@@ -44,5 +44,12 @@ namespace api.Modules.Storage.Services
         /// <param name="keys">List of object keys to delete</param>
         /// <returns>List of keys that were successfully deleted</returns>
         Task<IList<string>> DeleteObjectsAsync(IEnumerable<string> keys);
+
+        /// <summary>
+        /// Gets object tags from S3
+        /// </summary>
+        /// <param name="key">The object key (file path in the bucket)</param>
+        /// <returns>Dictionary of tag key-value pairs, or null if object doesn't exist</returns>
+        Task<Dictionary<string, string>?> GetObjectTagsAsync(string key);
     }
 }

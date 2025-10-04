@@ -77,6 +77,7 @@ public class Program
         builder.Services.AddUserServices();
         builder.Services.AddEmailServices(builder.Configuration);
         builder.Services.AddStorageServices(builder.Configuration);
+        builder.Services.AddKappiServices();
 
         var app = builder.Build();
 

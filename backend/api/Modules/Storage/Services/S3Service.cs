@@ -154,5 +154,28 @@ namespace api.Modules.Storage.Services
                 throw;
             }
         }
+
+        public async Task<Dictionary<string, string>?> GetObjectTagsAsync(string key)
+        {
+            try
+            {
+                var request = new GetObjectTaggingRequest
+                {
+                    BucketName = _s3Settings.BucketName,
+                    Key = key
+                };
+
+                var response = await s3Client.GetObjectTaggingAsync(request);
+                return response.Tagging.ToDictionary(t => t.Key, t => t.Value);
+            }
+            catch (AmazonS3Exception ex) when (ex.StatusCode == HttpStatusCode.NotFound)
+            {
+                return null;
+            }
+            catch
+            {
+                throw;
+            }
+        }
     }
 }
