@@ -1,0 +1,10 @@
+{
+  "name": "metadata-extractor",
+  "version": "1.0.0",
+  "description": "Lambda function to extract metadata from uploaded media files",
+  "main": "index.js",
+  "scripts": {
+    "build": "npm install && zip -r function.zip . -x '*.git*' -x 'node_modules/*' -x 'Dockerfile' -x 'build.sh' -x 'function.zip'"
+  },
+  "dependencies": {}
+}
