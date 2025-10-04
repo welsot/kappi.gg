@@ -34,7 +34,8 @@ public class GalleryControllerTests : ApiTestBase
         content.IsPublic.ShouldBeTrue();
         content.HasPassword.ShouldBeFalse();
         content.Media.ShouldNotBeNull();
-        content.Media.Count.ShouldBe(0);
+        content.Media.Media.Count.ShouldBe(0);
+        content.Media.TotalCount.ShouldBe(0);
 
         // Verify in database
         var dbContext = CreateDbContext();
@@ -102,12 +103,13 @@ public class GalleryControllerTests : ApiTestBase
         var request = new HttpRequestMessage(HttpMethod.Get, "/api/galleries");
         request.Headers.Add("X-API-TOKEN", apiToken.Token);
         var response = await Client.SendAsync(request);
-        var content = await response.Content.ReadFromJsonAsync<List<GalleryDto>>();
+        var content = await response.Content.ReadFromJsonAsync<GalleryListResponse>();
 
         // Assert
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
         content.ShouldNotBeNull();
-        content.Count.ShouldBeGreaterThanOrEqualTo(2);
+        content.Galleries.Count.ShouldBeGreaterThanOrEqualTo(2);
+        content.TotalCount.ShouldBeGreaterThanOrEqualTo(2);
     }
 
     [Fact]

@@ -200,7 +200,7 @@ public class AnonymousGalleryController(
                 gallery.ShortCode,
                 gallery.ExpiresAt,
                 gallery.CreatedAt,
-                mediaDtos
+                new MediaListResponse(mediaDtos, mediaDtos.Count)
             ));
         }
         catch (Exception ex)

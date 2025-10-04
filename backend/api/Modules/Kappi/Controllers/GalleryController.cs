@@ -69,7 +69,7 @@ public class GalleryController(
     }
 
     [HttpGet("api/galleries")]
-    [ProducesResponseType(typeof(List<GalleryDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(GalleryListResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetMyGalleries()
@@ -93,7 +93,7 @@ public class GalleryController(
 
             logger.LogInformation("Retrieved {Count} galleries for user {UserId}", galleryDtos.Count, userId);
 
-            return Ok(galleryDtos);
+            return Ok(new GalleryListResponse(galleryDtos, galleryDtos.Count));
         }
         catch (Exception ex)
         {
@@ -503,7 +503,7 @@ public class GalleryController(
             gallery.IsPublic,
             !string.IsNullOrEmpty(gallery.PasswordHash),
             gallery.CreatedAt,
-            mediaDtos
+            new MediaListResponse(mediaDtos, mediaDtos.Count)
         );
     }
 }

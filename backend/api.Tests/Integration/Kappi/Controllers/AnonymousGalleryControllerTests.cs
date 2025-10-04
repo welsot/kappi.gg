@@ -108,7 +108,8 @@ public class AnonymousGalleryControllerTests : ApiTestBase
         content.Id.ShouldBe(gallery.GalleryId);
         content.ShortCode.ShouldBe(gallery.ShortCode);
         content.Media.ShouldNotBeNull();
-        content.Media.Count.ShouldBe(0);
+        content.Media.Media.Count.ShouldBe(0);
+        content.Media.TotalCount.ShouldBe(0);
     }
 
     [Fact]

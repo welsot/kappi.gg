@@ -5,5 +5,5 @@ public record AnonymousGalleryDto(
     string ShortCode,
     DateTime ExpiresAt,
     DateTime CreatedAt,
-    List<MediaDto> Media
+    MediaListResponse Media
 );
