@@ -15,6 +15,11 @@ public class Db
         _context.Add(entity);
     }
 
+    public void Remove(object entity)
+    {
+        _context.Remove(entity);
+    }
+
     public async Task<int> SaveChangesAsync()
     {
         return await _context.SaveChangesAsync();

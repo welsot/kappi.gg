@@ -7,9 +7,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace api.Modules.User.Models;
 
-[Table("api_token")]
+[Table("refresh_token")]
 [Index(nameof(Token), IsUnique = true)]
-public class ApiToken
+public class RefreshToken
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -31,20 +31,27 @@ public class ApiToken
     [Required]
     public DateTime ExpiresAt { get; private set; }
 
-    private ApiToken()
+    public DateTime? RevokedAt { get; private set; }
+
+    private RefreshToken()
     {
     }
 
-    public ApiToken(User user, int expirationMinutes = 30)
+    public RefreshToken(User user, int expirationDays = 60)
     {
         User = user;
         Token = RandomTokenGenerator.GenerateRandomToken();
         CreatedAt = DateTime.UtcNow;
-        ExpiresAt = DateTime.UtcNow.AddMinutes(expirationMinutes);
+        ExpiresAt = DateTime.UtcNow.AddDays(expirationDays);
     }
 
     public bool IsValid()
     {
-        return ExpiresAt > DateTime.UtcNow;
+        return RevokedAt == null && ExpiresAt > DateTime.UtcNow;
+    }
+
+    public void Revoke()
+    {
+        RevokedAt = DateTime.UtcNow;
     }
 }

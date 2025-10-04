@@ -23,4 +23,11 @@ public class ApiTokenRepository : BaseRepository<ApiToken>, IApiTokenRepository
 
         return apiToken?.User;
     }
+
+    public async Task<ApiToken?> FindByTokenAsync(string token)
+    {
+        return await _context.ApiTokens
+            .Include(t => t.User)
+            .FirstOrDefaultAsync(t => t.Token == token);
+    }
 }

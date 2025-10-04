@@ -46,13 +46,20 @@ public class ApiTokenAuthHandler : AuthenticationHandler<ApiTokenAuthOptions>
             return AuthenticateResult.NoResult();
         }
 
-        // Validate the token
-        var user = await _apiTokenRepository.FindUserByTokenAsync(apiToken);
+        // Validate the token and check expiration
+        var tokenEntity = await _apiTokenRepository.FindByTokenAsync(apiToken);
 
-        if (user == null)
+        if (tokenEntity == null)
         {
             return AuthenticateResult.Fail("Invalid API token");
         }
+
+        if (!tokenEntity.IsValid())
+        {
+            return AuthenticateResult.Fail("API token has expired");
+        }
+
+        var user = tokenEntity.User;
 
         // Create user identity based on the user found
         var claims = new[]

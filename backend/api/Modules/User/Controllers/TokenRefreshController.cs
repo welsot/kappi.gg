@@ -11,51 +11,42 @@ using Microsoft.AspNetCore.Mvc;
 namespace api.Modules.User.Controllers;
 
 [ApiController]
-public class UserLoginController(
+public class TokenRefreshController(
     Db db,
-    ILogger<UserLoginController> logger,
-    IOneTimePasswordRepository otpRepository,
-    IApiTokenRepository apiTokenRepository,
+    ILogger<TokenRefreshController> logger,
     IRefreshTokenRepository refreshTokenRepository,
+    IApiTokenRepository apiTokenRepository,
     UserMapper mapper,
     IWebHostEnvironment env
 ) : ApiController
 {
     [ProducesResponseType(typeof(ApiTokenResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [EndpointName("apiUsersLogin")]
-    [HttpPost("api/users/login")]
-    public async Task<IActionResult> Login([FromBody] UserLoginDto dto)
+    [EndpointName("apiTokenRefresh")]
+    [HttpPost("api/token/refresh")]
+    public async Task<IActionResult> Refresh([FromBody] TokenRefreshDto dto)
     {
         if (!ModelState.IsValid) return BadRequest(ModelState);
 
         try
         {
-            var user = await otpRepository.FindByEmailAndCodeAsync(dto.Email, dto.Code);
+            var refreshToken = await refreshTokenRepository.FindByTokenAsync(dto.RefreshToken);
 
-            if (user == null)
+            if (refreshToken == null || !refreshToken.IsValid())
             {
-                return Error(404, "invalid_credentials");
+                return Error(401, "invalid_refresh_token");
             }
 
-            // Create access token (30 minutes)
-            var apiToken = new ApiToken(user, expirationMinutes: 30);
+            // Create new access token
+            var apiToken = new ApiToken(refreshToken.User, expirationMinutes: 30);
             apiTokenRepository.Add(apiToken);
 
-            // Create refresh token (60 days)
-            var refreshToken = new RefreshToken(user, expirationDays: 60);
-            refreshTokenRepository.Add(refreshToken);
-
-            // Invalidate the OTP after successful use
-            var usedOtp = user.OneTimePasswords.First(otp => otp.Code == dto.Code);
-            db.Remove(usedOtp);
-
             await db.SaveChangesAsync();
-            var userDto = mapper.Map(user);
+            var userDto = mapper.Map(refreshToken.User);
 
-            // Set cookies for both tokens
+            // Set cookie for new access token
             var accessTokenCookieOptions = new CookieOptions
             {
                 HttpOnly = true,
@@ -64,16 +55,7 @@ public class UserLoginController(
                 Expires = DateTime.UtcNow.AddMinutes(30)
             };
 
-            var refreshTokenCookieOptions = new CookieOptions
-            {
-                HttpOnly = true,
-                Secure = env.IsProduction(),
-                SameSite = SameSiteMode.Lax,
-                Expires = DateTime.UtcNow.AddDays(60)
-            };
-
             Response.Cookies.Append("apiToken", apiToken.Token, accessTokenCookieOptions);
-            Response.Cookies.Append("refreshToken", refreshToken.Token, refreshTokenCookieOptions);
 
             return Ok(
                 new ApiTokenResponse(
@@ -85,7 +67,7 @@ public class UserLoginController(
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Error logging in user");
+            logger.LogError(ex, "Error refreshing token");
             return Error(500, "unexpected_server_error");
         }
     }

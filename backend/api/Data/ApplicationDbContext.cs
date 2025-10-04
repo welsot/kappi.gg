@@ -14,6 +14,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<User> Users { get; set; }
 
     public DbSet<ApiToken> ApiTokens { get; set; }
+    public DbSet<RefreshToken> RefreshTokens { get; set; }
     public DbSet<OneTimePassword> OneTimePasswords { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

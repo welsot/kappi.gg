@@ -52,6 +52,16 @@ public abstract class ApiTestBase : IClassFixture<TestApiFactory>
         return await Client.PostAsJsonAsync(url, data);
     }
 
+    protected async Task<HttpResponseMessage> PostJsonAsync<T>(string url, T data, string apiToken)
+    {
+        var request = new HttpRequestMessage(HttpMethod.Post, url)
+        {
+            Content = JsonContent.Create(data)
+        };
+        request.Headers.Add("X-API-TOKEN", apiToken);
+        return await Client.SendAsync(request);
+    }
+
     protected ApplicationDbContext CreateDbContext()
     {
         var scope = Factory.Services.CreateScope();

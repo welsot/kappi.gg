@@ -37,11 +37,20 @@ public class UserLoginControllerTests : ApiTestBase
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
         content.ShouldNotBeNull();
         content.Token.ShouldNotBeNullOrEmpty();
+        content.RefreshToken.ShouldNotBeNullOrEmpty();
 
-        // Verify token exists in database
+        // Verify tokens exist in database
         var apiToken = await dbContext.ApiTokens.FirstOrDefaultAsync(t => t.Token == content.Token);
         apiToken.ShouldNotBeNull();
         apiToken.UserId.ShouldBe(user.Id);
+
+        var refreshToken = await dbContext.RefreshTokens.FirstOrDefaultAsync(t => t.Token == content.RefreshToken);
+        refreshToken.ShouldNotBeNull();
+        refreshToken.UserId.ShouldBe(user.Id);
+
+        // Verify OTP was deleted
+        var otpExists = await dbContext.OneTimePasswords.AnyAsync(o => o.UserId == user.Id && o.Code == otp.Code);
+        otpExists.ShouldBeFalse();
     }
 
     [Fact]
