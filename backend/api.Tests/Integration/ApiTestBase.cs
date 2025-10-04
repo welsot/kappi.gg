@@ -1,4 +1,5 @@
 using System.Net.Http.Json;
+
 using api.Data;
 using api.Modules.Common.DTO;
 using api.Modules.User.DTOs;
@@ -18,7 +19,7 @@ public abstract class ApiTestBase : IClassFixture<TestApiFactory>
         Factory = factory;
         Client = factory.CreateClient();
     }
-    
+
     protected async Task<ApiTokenResponse> LoginUserAsync(HttpClient client)
     {
         // Create a test user

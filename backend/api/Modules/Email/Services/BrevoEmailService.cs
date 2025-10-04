@@ -1,7 +1,8 @@
-using api.Modules.Email.Config;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
+
+using api.Modules.Email.Config;
 
 namespace api.Modules.Email.Services;
 
@@ -14,7 +15,7 @@ public class BrevoEmailService : EmailServiceBase
         IRazorViewRenderer viewRenderer,
         BrevoSettings settings,
         ILogger<BrevoEmailService> logger,
-        HttpClient httpClient) 
+        HttpClient httpClient)
         : base(viewRenderer, settings, logger)
     {
         _brevoSettings = settings;
@@ -57,7 +58,7 @@ public class BrevoEmailService : EmailServiceBase
 
             var response = await _httpClient.PostAsync("smtp/email", content);
             response.EnsureSuccessStatusCode();
-            
+
             _logger.LogInformation("Email sent via Brevo to {To} with subject {Subject}", to, subject);
         }
         catch (Exception ex)

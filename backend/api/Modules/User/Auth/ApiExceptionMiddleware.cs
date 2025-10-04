@@ -18,7 +18,7 @@ public class ApiExceptionMiddleware
         catch (Exception ex)
         {
             var authPolicy = ApiTokenAuthOptions.DefaultScheme;
-            if (ex.Message.Contains($"The AuthorizationPolicy named: '{authPolicy}'") || 
+            if (ex.Message.Contains($"The AuthorizationPolicy named: '{authPolicy}'") ||
                 context.Response.StatusCode == 401)
             {
                 context.Response.StatusCode = 401;

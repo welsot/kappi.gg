@@ -1,5 +1,7 @@
 using api.Modules.Email.Config;
+
 using MailKit.Net.Smtp;
+
 using MimeKit;
 
 namespace api.Modules.Email.Services;
@@ -11,7 +13,7 @@ public class MailcatcherEmailService : EmailServiceBase
     public MailcatcherEmailService(
         IRazorViewRenderer viewRenderer,
         MailcatcherSettings settings,
-        ILogger<MailcatcherEmailService> logger) 
+        ILogger<MailcatcherEmailService> logger)
         : base(viewRenderer, settings, logger)
     {
         _mailcatcherSettings = settings;
@@ -28,11 +30,11 @@ public class MailcatcherEmailService : EmailServiceBase
         try
         {
             var message = new MimeMessage();
-            
+
             message.From.Add(new MailboxAddress(
                 fromName.EmptyAsNull() ?? _settings.DefaultFromName,
                 fromEmail.EmptyAsNull() ?? _settings.DefaultFromEmail));
-            
+
             message.To.Add(new MailboxAddress("", to));
             message.Subject = subject;
 
@@ -40,21 +42,21 @@ public class MailcatcherEmailService : EmailServiceBase
             {
                 HtmlBody = htmlContent
             };
-            
+
             if (!string.IsNullOrEmpty(textContent))
             {
                 builder.TextBody = textContent;
             }
-            
+
             message.Body = builder.ToMessageBody();
 
             using var client = new SmtpClient();
             await client.ConnectAsync(_mailcatcherSettings.Host, _mailcatcherSettings.Port, false);
-            
+
             // Mailcatcher doesn't need authentication
             await client.SendAsync(message);
             await client.DisconnectAsync(true);
-            
+
             _logger.LogInformation("Email sent to {To} with subject {Subject}", to, subject);
         }
         catch (Exception ex)

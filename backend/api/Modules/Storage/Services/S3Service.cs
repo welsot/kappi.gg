@@ -50,7 +50,7 @@ namespace api.Modules.Storage.Services
             };
 
             var signedUrl = await s3Client.GetPreSignedURLAsync(request);
-            
+
             if (env.IsDevelopment())
             {
                 signedUrl = signedUrl.Replace("https://", "http://");
@@ -80,7 +80,7 @@ namespace api.Modules.Storage.Services
                 throw;
             }
         }
-        
+
         public async Task<long?> GetFileSizeAsync(string key)
         {
             try
@@ -102,7 +102,7 @@ namespace api.Modules.Storage.Services
                 throw;
             }
         }
-        
+
         public async Task<bool> DeleteObjectAsync(string key)
         {
             try
@@ -112,7 +112,7 @@ namespace api.Modules.Storage.Services
                     BucketName = _s3Settings.BucketName,
                     Key = key
                 };
-                
+
                 await s3Client.DeleteObjectAsync(deleteRequest);
                 return true;
             }
@@ -127,24 +127,24 @@ namespace api.Modules.Storage.Services
                 throw;
             }
         }
-        
+
         public async Task<IList<string>> DeleteObjectsAsync(IEnumerable<string> keys)
         {
             try
             {
                 var keyObjects = keys.Select(k => new KeyVersion { Key = k }).ToList();
-                
+
                 if (!keyObjects.Any())
                 {
                     return new List<string>();
                 }
-                
+
                 var deleteRequest = new DeleteObjectsRequest
                 {
                     BucketName = _s3Settings.BucketName,
                     Objects = keyObjects
                 };
-                
+
                 var response = await s3Client.DeleteObjectsAsync(deleteRequest);
                 return response.DeletedObjects.Select(o => o.Key).ToList();
             }

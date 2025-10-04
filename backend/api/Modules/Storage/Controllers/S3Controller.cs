@@ -1,8 +1,10 @@
 using System;
 using System.Threading.Tasks;
+
 using api.Modules.Common.Controllers;
 using api.Modules.Storage.Services;
 using api.Modules.User.Auth;
+
 using Microsoft.AspNetCore.Mvc;
 
 namespace api.Modules.Storage.Controllers
@@ -34,9 +36,9 @@ namespace api.Modules.Storage.Controllers
 
             // Generate a unique key to avoid overwriting existing files
             var uniqueKey = $"{Guid.NewGuid()}/{key}";
-            
+
             var url = await _s3Service.GeneratePresignedUploadUrlAsync(uniqueKey, contentType);
-            
+
             return Ok(new { Url = url, Key = uniqueKey });
         }
 
@@ -53,9 +55,9 @@ namespace api.Modules.Storage.Controllers
             {
                 return BadRequest("Key is required.");
             }
-            
+
             var url = await _s3Service.GeneratePresignedDownloadUrlAsync(key);
-            
+
             return Ok(new { Url = url });
         }
     }

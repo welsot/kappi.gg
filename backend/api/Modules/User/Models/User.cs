@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace api.Modules.User.Models;
@@ -16,24 +17,24 @@ public class User
 
     [StringLength(255)]
     [Column]
-    public string Email 
+    public string Email
     {
         get => _email;
         private set => _email = value.ToLowerInvariant();
     }
-    
+
     [Column]
     public bool IsEmailVerified { get; set; } = false;
-    
+
     [Column]
     public DateTime CreatedAt { get; private set; } = DateTime.UtcNow;
-    
+
     public virtual ICollection<OneTimePassword> OneTimePasswords { get; private set; } = new List<OneTimePassword>();
-    
+
     public virtual ICollection<ApiToken> ApiTokens { get; private set; } = new List<ApiToken>();
-    
+
     private User() { }
-    
+
     public User(Guid id, string email)
     {
         Id = id;

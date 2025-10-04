@@ -73,7 +73,7 @@ public class ApiTokenAuthHandler : AuthenticationHandler<ApiTokenAuthOptions>
         Response.ContentType = "application/json";
         await Response.WriteAsJsonAsync(new ErrorResponse("auth_required"));
     }
-    
+
     protected override Task HandleForbiddenAsync(AuthenticationProperties properties)
     {
         Response.StatusCode = 403;

@@ -38,13 +38,13 @@ public class OneTimePasswordCleanupService : BackgroundService
     private async Task CleanupExpiredOneTimePasswordsAsync(CancellationToken cancellationToken)
     {
         _logger.LogDebug("Starting expired one-time password cleanup");
-        
+
         using var scope = _scopeFactory.CreateScope();
         var repository = scope.ServiceProvider.GetRequiredService<IOneTimePasswordRepository>();
-        
+
         // First find the expired OTPs to log the count
         var expiredOtpsCount = await repository.CountExpiredAsync(cancellationToken);
-        
+
         if (expiredOtpsCount > 0)
         {
             _logger.LogInformation("Removing {Count} expired one-time passwords", expiredOtpsCount);

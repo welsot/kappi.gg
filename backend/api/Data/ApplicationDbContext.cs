@@ -20,7 +20,7 @@ public class ApplicationDbContext : DbContext
     {
         //modelBuilder.ApplyConfiguration(new OneTimePassword.Configuration());
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
-    
+
         base.OnModelCreating(modelBuilder);
     }
 

@@ -1,15 +1,21 @@
 using System.Data.Common;
+
 using api.Data;
 using api.Modules.Email.Config;
+
 using DotNet.Testcontainers.Builders;
 using DotNet.Testcontainers.Containers;
+
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+
 using Npgsql;
+
 using Respawn;
+
 using Testcontainers.PostgreSql;
 
 namespace api.Tests.Integration;
@@ -21,7 +27,7 @@ public class TestApiFactory : WebApplicationFactory<Program>, IAsyncLifetime
     private DbConnection _connection = null!;
 
     private readonly IContainer _smtpContainer;
-    
+
     private static readonly SemaphoreSlim _initLock = new(1, 1);
     private static bool _smtpInitialized;
 
@@ -44,7 +50,7 @@ public class TestApiFactory : WebApplicationFactory<Program>, IAsyncLifetime
     public async Task InitializeAsync()
     {
         await _dbContainer.StartAsync();
-        
+
         // SMTP Container is reusable between tests
         await _initLock.WaitAsync();
         try

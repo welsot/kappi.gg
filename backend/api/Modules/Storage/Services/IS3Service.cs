@@ -1,5 +1,5 @@
 using System;
- using System.Threading.Tasks;
+using System.Threading.Tasks;
 
 namespace api.Modules.Storage.Services
 {
@@ -13,7 +13,7 @@ namespace api.Modules.Storage.Services
         /// <param name="expirationMinutes">Optional: URL expiration in minutes</param>
         /// <returns>A pre-signed URL for PUT operation</returns>
         Task<string> GeneratePresignedUploadUrlAsync(string key, string contentType, int? expirationMinutes = null);
-        
+
         /// <summary>
         /// Generates a pre-signed URL for downloading a file from S3
         /// </summary>
@@ -23,21 +23,21 @@ namespace api.Modules.Storage.Services
         Task<string> GeneratePresignedDownloadUrlAsync(string key, int? expirationMinutes = null);
 
         Task<bool> KeyExistsAsync(string key);
-        
+
         /// <summary>
         /// Gets the file size in bytes for an object in S3
         /// </summary>
         /// <param name="key">The object key (file path in the bucket)</param>
         /// <returns>The file size in bytes, or null if the object doesn't exist</returns>
         Task<long?> GetFileSizeAsync(string key);
-        
+
         /// <summary>
         /// Deletes an object from S3
         /// </summary>
         /// <param name="key">The object key (file path in the bucket)</param>
         /// <returns>True if deleted successfully, false if the object doesn't exist</returns>
         Task<bool> DeleteObjectAsync(string key);
-        
+
         /// <summary>
         /// Deletes multiple objects from S3
         /// </summary>

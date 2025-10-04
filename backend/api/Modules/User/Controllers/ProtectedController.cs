@@ -18,14 +18,15 @@ public class ProtectedController : ApiController
         // Get the authenticated user's ID from claims
         var userId = GetUserId();
         var userEmail = User.FindFirstValue(ClaimTypes.Email);
-        
-        return Ok(new { 
-            Message = "You have access to protected data!", 
+
+        return Ok(new
+        {
+            Message = "You have access to protected data!",
             UserId = userId,
             Email = userEmail
         });
     }
-    
+
     [HttpGet("public")]
     public IActionResult GetPublic()
     {

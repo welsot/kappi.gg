@@ -7,11 +7,11 @@ public static class ApiTokenAuthExtensions
     public static AuthenticationBuilder AddApiTokenAuth(this AuthenticationBuilder builder)
     {
         return builder.AddScheme<ApiTokenAuthOptions, ApiTokenAuthHandler>(
-            ApiTokenAuthOptions.DefaultScheme, 
+            ApiTokenAuthOptions.DefaultScheme,
             _ => { }
         );
     }
-    
+
     public static IServiceCollection AddApiTokenAuth(this IServiceCollection services)
     {
         services
@@ -26,7 +26,7 @@ public static class ApiTokenAuthExtensions
                 options.DefaultChallengeScheme = ApiTokenAuthOptions.DefaultScheme;
             })
             .AddApiTokenAuth();
-            
+
         return services;
     }
 }

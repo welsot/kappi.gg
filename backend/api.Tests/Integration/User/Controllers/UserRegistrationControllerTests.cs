@@ -1,9 +1,12 @@
 using System.Net;
 using System.Net.Http.Json;
+
 using api.Modules.Common.DTO;
 using api.Modules.User.DTOs;
-using Shouldly;
+
 using Microsoft.EntityFrameworkCore;
+
+using Shouldly;
 
 namespace api.Tests.Integration.User.Controllers;
 
@@ -37,14 +40,14 @@ public class UserRegistrationControllerTests : ApiTestBase
     public async Task Register_WithDuplicateEmail_ReturnsOkWithUserId()
     {
         var registrationDto = new UserRegistrationDto { Email = "duplicate@example.com" };
-    
+
         // First registration - should create the user
         var firstResponse = await PostJsonAsync("/api/users/register", registrationDto);
         var firstContent = await firstResponse.Content.ReadFromJsonAsync<GuidResponse>();
         firstResponse.StatusCode.ShouldBe(HttpStatusCode.Created);
         firstContent.ShouldNotBeNull();
         var userId = firstContent.Id;
-        
+
         // Second registration with the same email - should return OK with the same user ID
         var response = await PostJsonAsync("/api/users/register", registrationDto);
         var content = await response.Content.ReadFromJsonAsync<GuidResponse>();

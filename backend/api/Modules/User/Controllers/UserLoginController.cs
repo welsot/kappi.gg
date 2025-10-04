@@ -49,7 +49,7 @@ public class UserLoginController(
             {
                 HttpOnly = true,
                 Secure = env.IsProduction(),
-                SameSite =  SameSiteMode.Lax,
+                SameSite = SameSiteMode.Lax,
                 Expires = DateTime.UtcNow.AddYears(1)
             };
 

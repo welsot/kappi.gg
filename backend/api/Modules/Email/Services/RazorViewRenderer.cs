@@ -1,5 +1,6 @@
-using RazorLight;
 using System.Reflection;
+
+using RazorLight;
 
 namespace api.Modules.Email.Services;
 
