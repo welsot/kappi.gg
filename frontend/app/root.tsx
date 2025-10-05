@@ -51,7 +51,7 @@ export async function loader({ request }: Route.LoaderArgs) {
 
   // Check if token is expired and refresh if needed
   if (isTokenExpired(request)) {
-    const { tokenResponse, error } = await refreshAccessToken(request);
+    const { tokenResponse, error: refreshTokenError } = await refreshAccessToken(request);
 
     if (tokenResponse) {
       // Set new auth cookies
@@ -63,16 +63,39 @@ export async function loader({ request }: Route.LoaderArgs) {
       // Use the user from the token response
       currentUser = tokenResponse.user;
     } else {
-      console.warn('Failed to refresh token:', error);
+      console.warn('[TokenExpired] Failed to refresh token:', refreshTokenError);
     }
   } else {
     // Token is still valid, fetch current user
-    const { user, error } = await getCurrentUser(request);
+    const { user, error: getUserError } = await getCurrentUser(request);
 
     if (user) {
       currentUser = user.user;
     } else {
-      console.warn('Failed to fetch current user:', error);
+      console.warn('Failed to fetch current user:', getUserError);
+      console.warn('[NotExpired] Trying to refresh token');
+
+      /**
+       * Try refresh token START
+       */
+      const { tokenResponse, error } = await refreshAccessToken(request);
+
+      if (tokenResponse) {
+        // Set new auth cookies
+        const cookieHeaders = setAuthCookies(tokenResponse);
+        cookieHeaders.forEach((cookie) => {
+          headers.append('Set-Cookie', cookie);
+        });
+
+        // Use the user from the token response
+        currentUser = tokenResponse.user;
+        console.info('[NotExpired] Successfully refreshed token');
+      } else {
+        console.warn('Failed to refresh token:', error);
+      }
+      /**
+       * Try refresh token END
+       */
     }
   }
 
