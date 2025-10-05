@@ -3,24 +3,7 @@ import { Footer } from './Footer';
 import { Navbar } from './Navbar';
 import { LockClosedIcon } from '@heroicons/react/24/outline';
 
-import { useEffect } from 'react';
-import { useCurrentUser } from '~/context/UserContext';
-import { storageService } from '~/utils/storage';
-import { apiGetCurrentUser } from '~/api/apiComponents';
-
 export function AuthRequired() {
-  const { setUser } = useCurrentUser();
-
-  useEffect(() => {
-    apiGetCurrentUser()
-      .then((res) => {
-        setUser(res.user);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  }, []);
-
   return (
     <div className="flex flex-col min-h-screen">
       <Navbar />

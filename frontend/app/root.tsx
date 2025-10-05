@@ -11,11 +11,15 @@ import {
 
 import type { Route } from './+types/root';
 import './app.css';
-import { serverFetch } from '~/utils/serverFetch';
-import type { UserInfoResponse } from '~/api/apiSchemas';
-import { UserProvider } from './context/UserContext';
-import { useEffect } from 'react';
+import type { UserDto } from '~/api/apiSchemas';
+import { CurrentUserProvider } from './context/UserContext';
 import { AnimatePresence, motion } from 'framer-motion';
+import {
+  isTokenExpired,
+  refreshAccessToken,
+  getCurrentUser,
+  setAuthCookies,
+} from '~/utils/auth.server';
 
 interface PlausibleOptions {
   callback?: () => void;
@@ -41,6 +45,40 @@ export const links: Route.LinksFunction = () => [
   },
 ];
 
+export async function loader({ request }: Route.LoaderArgs) {
+  let currentUser: UserDto | null = null;
+  const headers = new Headers();
+
+  // Check if token is expired and refresh if needed
+  if (isTokenExpired(request)) {
+    const { tokenResponse, error } = await refreshAccessToken(request);
+
+    if (tokenResponse) {
+      // Set new auth cookies
+      const cookieHeaders = setAuthCookies(tokenResponse);
+      cookieHeaders.forEach((cookie) => {
+        headers.append('Set-Cookie', cookie);
+      });
+
+      // Use the user from the token response
+      currentUser = tokenResponse.user;
+    } else {
+      console.warn('Failed to refresh token:', error);
+    }
+  } else {
+    // Token is still valid, fetch current user
+    const { user, error } = await getCurrentUser(request);
+
+    if (user) {
+      currentUser = user.user;
+    } else {
+      console.warn('Failed to fetch current user:', error);
+    }
+  }
+
+  return { currentUser, headers };
+}
+
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
@@ -61,10 +99,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
+  const { currentUser } = useLoaderData<typeof loader>();
   const navigation = useNavigation();
   const isLoading = navigation.state === 'loading';
 
   return (
+    <CurrentUserProvider currentUser={currentUser}>
       <div className="relative">
         <AnimatePresence>
           {isLoading && (
@@ -88,6 +128,7 @@ export default function App() {
         </AnimatePresence>
         <Outlet />
       </div>
+    </CurrentUserProvider>
   );
 }
 
