@@ -1,6 +1,7 @@
 {
   "name": "metadata-extractor",
   "version": "1.0.0",
+  "type": "module",
   "description": "Lambda function to extract metadata from uploaded media files",
   "main": "index.js",
   "scripts": {

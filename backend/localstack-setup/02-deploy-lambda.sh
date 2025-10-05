@@ -24,6 +24,9 @@ awslocal lambda create-function \
   --memory-size 256 \
   --environment Variables="{S3_ENDPOINT=http://localstack:4566,AWS_REGION=us-east-1}"
 
+echo "Waiting for Lambda function to become active..."
+awslocal lambda wait function-active-v2 --function-name metadata-extractor
+
 echo "Granting S3 permission to invoke Lambda..."
 awslocal lambda add-permission \
   --function-name metadata-extractor \
