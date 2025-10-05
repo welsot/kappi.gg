@@ -1,7 +1,7 @@
 import type { Route } from './+types/home';
 import { Hero } from '~/components/Hero';
 import { Footer } from '~/components/Footer';
-import { redirect } from 'react-router';
+import { InlineNavbar } from '~/components/InlineNavbar';
 
 export function meta({}: Route.MetaArgs) {
   const baseUrl = "https://kappi.gg";
@@ -32,19 +32,6 @@ export function meta({}: Route.MetaArgs) {
     // Color theme
     { name: "theme-color", content: "#59168b" }
   ];
-}
-
-export async function loader({ request }: Route.LoaderArgs) {
-  const ua = request.headers.get('User-Agent');
-  
-  if (!ua) return { ua: '(empty)' };
-  
-  const lcUa = ua.toLowerCase();
-  const isEReader = lcUa.includes('kobo') || lcUa.includes('kindle');
-  
-  if (!isEReader) return { ua: ua };
-
-  return redirect('/ereader');
 }
 
 export default function Home() {

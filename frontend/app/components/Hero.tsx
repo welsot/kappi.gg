@@ -1,8 +1,10 @@
 import { ShortCodeInput } from '~/components/ShortCodeInput';
+import { InlineNavbar } from '~/components/InlineNavbar';
 
 export function Hero() {
   return (
     <section className="bg-gradient-to-b from-purple-50 to-white py-16 md:py-24">
+      <InlineNavbar/>
       <div className="container mx-auto px-4 flex flex-col items-center text-center">
         <h1 className="text-4xl md:text-6xl font-bold text-purple-900 mb-6">
           Kappi.gg
