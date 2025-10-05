@@ -111,6 +111,8 @@ interface MediaThumbnailProps {
 }
 
 function MediaThumbnail({ media, onClick }: MediaThumbnailProps) {
+  const [imageError, setImageError] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
   const isVideo = media.mediaType?.startsWith('video/');
 
   return (
@@ -118,13 +120,13 @@ function MediaThumbnail({ media, onClick }: MediaThumbnailProps) {
       onClick={onClick}
       className="group relative bg-white rounded-lg shadow overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
     >
-      <div className="aspect-square bg-gray-100 flex items-center justify-center">
+      <div className="aspect-square bg-gray-100 flex items-center justify-center relative">
         {isVideo ? (
           <div className="relative w-full h-full">
             <video
               src={media.downloadUrl}
               className="w-full h-full object-cover"
-              muted
+              preload="metadata"
             />
             <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-30">
               <div className="w-12 h-12 rounded-full bg-white bg-opacity-80 flex items-center justify-center">
@@ -139,12 +141,31 @@ function MediaThumbnail({ media, onClick }: MediaThumbnailProps) {
             </div>
           </div>
         ) : (
-          <img
-            src={media.downloadUrl}
-            alt=""
-            className="w-full h-full object-cover"
-            loading="lazy"
-          />
+          <>
+            {!imageLoaded && !imageError && (
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="w-8 h-8 border-2 border-purple-600 border-t-transparent rounded-full animate-spin"></div>
+              </div>
+            )}
+            {imageError ? (
+              <div className="absolute inset-0 flex items-center justify-center">
+                <PhotoIcon className="w-12 h-12 text-gray-400" />
+              </div>
+            ) : (
+              <img
+                src={media.downloadUrl}
+                alt=""
+                className="w-full h-full object-cover"
+                loading="lazy"
+                onLoad={() => setImageLoaded(true)}
+                onError={() => {
+                  console.error('Failed to load image:', media.downloadUrl);
+                  setImageError(true);
+                }}
+                style={{ display: imageLoaded ? 'block' : 'none' }}
+              />
+            )}
+          </>
         )}
       </div>
 
