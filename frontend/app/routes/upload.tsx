@@ -1,6 +1,8 @@
 import type { Route } from './+types/upload';
-import { GalleryUploader } from '~/components/GalleryUploader';
+import { AnonymousGalleryUploader } from '~/components/AnonymousGalleryUploader';
+import { AuthenticatedGalleryUploader } from '~/components/AuthenticatedGalleryUploader';
 import { Footer } from '~/components/Footer';
+import { useCurrentUser } from '~/context/UserContext';
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -13,10 +15,12 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export default function Upload() {
+  const { currentUser } = useCurrentUser();
+
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
       <main className="flex-grow py-8">
-        <GalleryUploader />
+        {currentUser ? <AuthenticatedGalleryUploader /> : <AnonymousGalleryUploader />}
       </main>
       <Footer />
     </div>
