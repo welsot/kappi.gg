@@ -4,25 +4,25 @@ import { Footer } from '~/components/Footer';
 import { redirect } from 'react-router';
 
 export function meta({}: Route.MetaArgs) {
-  const baseUrl = "https://kobo.gg";
+  const baseUrl = "https://kappi.gg";
   return [
-    { title: "Kobo.gg - Easily Upload & Download eBooks for Your Kobo eReader" },
-    { name: "description", content: "Upload ePUB books anonymously and quickly download them to your Kobo eReader with short, easy-to-use URLs." },
+    { title: "Kappi.gg - Share Photos & Videos in Original Quality" },
+    { name: "description", content: "Upload and share photos and videos in original quality. Easy sharing for travelers and photographers." },
     { name: "viewport", content: "width=device-width,initial-scale=1" },
 
     // Open Graph / Facebook
     { property: "og:type", content: "website" },
     { property: "og:url", content: baseUrl },
-    { property: "og:title", content: "Kobo.gg - eBook Manager for Kobo Devices" },
-    { property: "og:description", content: "The simplest way to upload and transfer ePUB books to your Kobo eReader. Anonymous uploads, no account required." },
-    { property: "og:image", content: `${baseUrl}/kobogg-screenshot.png` },
+    { property: "og:title", content: "Kappi.gg - Photo & Video Sharing Platform" },
+    { property: "og:description", content: "Share photos and videos in original quality without compression. Perfect for travelers and photographers." },
+    { property: "og:image", content: `${baseUrl}/kappigg-screenshot.png` },
 
     // Twitter
     { name: "twitter:card", content: "summary_large_image" },
     { name: "twitter:url", content: baseUrl },
-    { name: "twitter:title", content: "Kobo.gg - eBook Manager for Kobo Devices" },
-    { name: "twitter:description", content: "The simplest way to upload and transfer ePUB books to your Kobo eReader. Anonymous uploads, no account required." },
-    { name: "twitter:image", content: `${baseUrl}/kobogg-screenshot.png` },
+    { name: "twitter:title", content: "Kappi.gg - Photo & Video Sharing Platform" },
+    { name: "twitter:description", content: "Share photos and videos in original quality without compression. Perfect for travelers and photographers." },
+    { name: "twitter:image", content: `${baseUrl}/kappigg-screenshot.png` },
 
     // Icons
     { rel: "icon", href: "/img/icon.64.png", type: "image/png" },
