@@ -81,7 +81,7 @@ public class AnonymousGalleryController(
             }
 
             // Generate S3 key
-            var s3Key = $"galleries/anonymous/{gallery.Id}/{Guid.NewGuid()}/{dto.FileName}";
+            var s3Key = $"galleries/anonymous/{gallery.Id}/{Guid.NewGuid()}-{dto.FileName}";
 
             // Create media record
             var media = new Media(Guid.NewGuid(), gallery.Id, s3Key);
