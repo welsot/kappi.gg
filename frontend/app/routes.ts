@@ -8,4 +8,5 @@ export default [
   route('/dashboard', 'routes/dashboard.tsx'),
   route('/manage/:accessKey', 'routes/manage.$accessKey.tsx'),
   route('/g/:shortCode', 'routes/g.$shortCode.tsx'),
+  route('/:shortCode', 'routes/$shortCode.tsx'),
 ] satisfies RouteConfig;
