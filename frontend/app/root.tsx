@@ -20,6 +20,9 @@ import {
   getCurrentUser,
   setAuthCookies,
 } from '~/utils/auth.server';
+import { useEffect } from 'react';
+import { storageService } from '~/utils/storage';
+import { api } from '~/utils/api';
 
 interface PlausibleOptions {
   callback?: () => void;
@@ -132,6 +135,13 @@ export default function App() {
   const { currentUser, kappiAccessToken } = useLoaderData<typeof loader>();
   const navigation = useNavigation();
   const isLoading = navigation.state === 'loading';
+
+  useEffect(() => {
+    if (kappiAccessToken) {
+      storageService.setApiToken(kappiAccessToken);
+      api.setAuthToken(kappiAccessToken);
+    }
+  }, [kappiAccessToken]);
 
   return (
     <CurrentUserProvider currentUser={currentUser}>
