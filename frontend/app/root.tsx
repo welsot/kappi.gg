@@ -48,6 +48,7 @@ export const links: Route.LinksFunction = () => [
 export async function loader({ request }: Route.LoaderArgs) {
   let currentUser: UserDto | null = null;
   const headers = new Headers();
+  let kappiAccessToken: string|null = null;
 
   // Check if token is expired and refresh if needed
   if (isTokenExpired(request)) {
@@ -62,6 +63,7 @@ export async function loader({ request }: Route.LoaderArgs) {
 
       // Use the user from the token response
       currentUser = tokenResponse.user;
+      kappiAccessToken = tokenResponse.token;
     } else {
       console.warn('[TokenExpired] Failed to refresh token:', refreshTokenError);
     }
@@ -89,6 +91,7 @@ export async function loader({ request }: Route.LoaderArgs) {
 
         // Use the user from the token response
         currentUser = tokenResponse.user;
+        kappiAccessToken = tokenResponse.token;
         console.info('[NotExpired] Successfully refreshed token');
       } else {
         console.warn('Failed to refresh token:', error);
@@ -99,7 +102,11 @@ export async function loader({ request }: Route.LoaderArgs) {
     }
   }
 
-  return { currentUser, headers };
+  return {
+    currentUser: currentUser,
+    kappiAccessToken: kappiAccessToken,
+    headers: headers
+  };
 }
 
 export function Layout({ children }: { children: React.ReactNode }) {
@@ -122,7 +129,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-  const { currentUser } = useLoaderData<typeof loader>();
+  const { currentUser, kappiAccessToken } = useLoaderData<typeof loader>();
   const navigation = useNavigation();
   const isLoading = navigation.state === 'loading';
 
